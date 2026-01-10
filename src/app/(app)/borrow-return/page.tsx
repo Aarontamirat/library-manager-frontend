@@ -21,13 +21,12 @@ import {
 } from "@/components/ui/input-group";
 import { useState, useEffect } from "react";
 import { apiFetch } from "@/lib/api";
-import Add from "@/components/modals/books/Add";
-import View from "@/components/modals/books/View";
-import EditModal from "@/components/modals/books/Edit";
-import Delete from "@/components/modals/books/Delete";
+import BorrowBook from "@/components/modals/borrow-return/BorrowBook";
 
 export default function Books() {
   const [borrowRecords, setBorrowRecords] = useState([]);
+  const [isBorrowModalOpen, setIsBorrowModalOpen] = useState(false);
+  const [isReturnModalOpen, setIsReturnModalOpen] = useState(false);
 
   const fetchBorrowRecords = async () => {
     // Get books
@@ -46,7 +45,7 @@ export default function Books() {
     fetchBorrowRecords();
   }, []);
 
-  console.log(borrowRecords);
+  const now = new Date().toISOString().split("T")[0];
 
   return (
     <div>
@@ -63,7 +62,7 @@ export default function Books() {
             variant="default"
             size="lg"
             className="text-base"
-            // onClick={() => setIsModalOpen(true)}
+            onClick={() => setIsBorrowModalOpen(true)}
           >
             <ArrowLeftRight />
             Borrow Book
@@ -73,7 +72,7 @@ export default function Books() {
             variant="outline"
             size="lg"
             className="text-base"
-            // onClick={() => setIsModalOpen(true)}
+            onClick={() => setIsReturnModalOpen(true)}
           >
             <ArrowLeftRight />
             Return Book
@@ -100,6 +99,16 @@ export default function Books() {
                     {record.return_date && (
                       <span className="bg-gray-200 px-3 rounded-full text-base font-semibold text-gray-900">
                         RETURNED
+                      </span>
+                    )}
+                    {!record.return_date && record.due_date < now && (
+                      <span className="bg-red-400 px-3 rounded-full text-base font-semibold text-gray-50">
+                        OVERDUE
+                      </span>
+                    )}
+                    {!record.return_date && record.due_date >= now && (
+                      <span className="bg-black px-3 rounded-full text-base font-semibold text-gray-50">
+                        ACTIVE
                       </span>
                     )}
                   </div>
@@ -136,11 +145,30 @@ export default function Books() {
                     </div>
                   )}
                 </div>
+                {/* Mark as Read Button */}
+                {!record.return_date && record.due_date >= now && (
+                  <div className="mt-5">
+                    <Button size="lg" className="text-base" onClick={() => {}}>
+                      Mark as Returned
+                    </Button>
+                  </div>
+                )}
               </div>
             );
           })}
         </div>
       </div>
+      <BorrowBook
+        isOpen={isBorrowModalOpen}
+        onClose={() => setIsBorrowModalOpen(false)}
+        borrowBookData={borrowRecords}
+        onSuccess={() => fetchBorrowRecords()}
+      ></BorrowBook>
+      {/* <ReturnBook
+        isOpen={isReturnModalOpen}
+        onClose={() => setIsReturnModalOpen(false)}
+        onSuccess={() => fetchBorrowRecords()}
+      ></ReturnBook> */}
     </div>
   );
 }
