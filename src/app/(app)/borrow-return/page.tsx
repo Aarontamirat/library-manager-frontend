@@ -147,7 +147,13 @@ export default function Books() {
                 {/* Mark as Read Button */}
                 {!record.return_date && record.due_date >= now && (
                   <div className="mt-5">
-                    <Button size="lg" className="text-base" onClick={() => {}}>
+                    <Button
+                      size="lg"
+                      className="text-base"
+                      onClick={() => {
+                        setIsReturnModalOpen(true);
+                      }}
+                    >
                       Mark as Returned
                     </Button>
                   </div>
