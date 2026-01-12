@@ -57,20 +57,20 @@ export default function Books() {
   });
 
   return (
-    <div>
+    <div className="space-y-6">
       {/* Header */}
-      <div className="h-20 py-4 flex justify-between items-center">
+      <div className="h-20 flex justify-between items-center">
         <div>
-          <h1 className="text-3xl font-semibold">Books</h1>
+          <h1 className="text-3xl font-bold">Books</h1>
           <p className="mt-1 text-gray-500">
             Manage your library's book collection
           </p>
         </div>
-        <div className="text-xl">
+        <div className="">
           <Button
             variant="default"
             size="lg"
-            className="text-base"
+            className=""
             onClick={() => setIsModalOpen(true)}
           >
             <Plus />
@@ -99,34 +99,34 @@ export default function Books() {
           return (
             <div
               key={book.id}
-              className="bg-white dark:bg-gray-800 rounded-lg p-4 shadow"
+              className="bg-white dark:bg-gray-800 rounded-lg p-6 shadow"
             >
               <div className="flex justify-between items-center">
                 <div className="flex flex-col items-baseline">
-                  <h3 className="text-xl font-bold">{book.title}</h3>
+                  <h3 className="text-lg font-semibold">{book.title}</h3>
                 </div>
                 {/* status */}
                 <span
-                  className={`text-gray-50 dark:text-gray-900 ${
+                  className={`text-sm text-gray-50 dark:text-gray-900 items-center ${
                     available
                       ? "bg-black dark:bg-white"
                       : "bg-red-500 dark:bg-red-600"
-                  } rounded-full px-4`}
+                  } rounded-full px-2`}
                 >
-                  {available ? "available" : "Out of Stock"}
+                  {available ? "Available" : "Out of Stock"}
                 </span>
               </div>
-              <p className=" text-gray-500">by {book.author}</p>
-              <div className="flex flex-col gap-2 mt-6">
-                <p className="text-gray-600">
+              <p className=" text-sm text-gray-500">by {book.author}</p>
+              <div className="text-sm flex flex-col gap-2 mt-6">
+                <p className="font-semibold text-gray-600">
                   Genre:{" "}
                   <span className="text-gray-500">{book.genre.name}</span>
                 </p>
-                <p className="text-gray-600">
+                <p className="font-semibold text-gray-600">
                   Published:{" "}
                   <span className="text-gray-500">{book.published_year}</span>
                 </p>
-                <p className="text-gray-600">
+                <p className="font-semibold text-gray-600">
                   Available Copies:{" "}
                   <span className="text-gray-500">{book.available_copies}</span>
                 </p>

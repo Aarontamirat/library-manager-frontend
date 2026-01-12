@@ -94,7 +94,7 @@ export default function BorrowBook({
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent
         className="
-      max-w-lg text-base
+      max-w-lg 
       bg-linear-to-br 
       from-white via-slate-100 to-white 
       dark:from-gray-700 dark:via-gray-800 dark:to-gray-700
@@ -111,11 +111,11 @@ export default function BorrowBook({
 
         {/* Books */}
         <div className="mt-5">
-          <Label className="block text-xl font-medium mb-1">Select Book</Label>
+          <Label className="block font-medium mb-1">Select Book</Label>
           <Select value={bookId} onValueChange={setBookId}>
             <SelectTrigger
               className="
-                          w-full mt-1 text-lg py-6
+                          w-full mt-1  py-6
                           bg-white dark:bg-gray-800 
                           border border-slate-300 dark:border-gray-700
                         "
@@ -130,7 +130,7 @@ export default function BorrowBook({
                   value={book.id}
                   className="whitespace-nowrap"
                 >
-                  <div className="flex flex-col text-base">
+                  <div className="flex flex-col ">
                     <p className="text-black font-semibold">{book.title}</p>
                     <p className="text-gray-600 font-semibold">
                       by <span> {book.author}</span> -{" "}
@@ -145,13 +145,11 @@ export default function BorrowBook({
 
         {/* Members */}
         <div className="mt-5">
-          <Label className="block text-xl font-medium mb-1">
-            Select Member
-          </Label>
+          <Label className="block font-medium mb-1">Select Member</Label>
           <Select value={memberId} onValueChange={setMemberId}>
             <SelectTrigger
               className="
-                          w-full mt-1 text-lg py-6
+                          w-full mt-1  py-6
                           bg-white dark:bg-gray-800 
                           border border-slate-300 dark:border-gray-700
                         "
@@ -166,7 +164,7 @@ export default function BorrowBook({
                   value={member.id}
                   className="whitespace-nowrap"
                 >
-                  <div className="flex flex-col text-base">
+                  <div className="flex flex-col ">
                     <p className="text-black font-semibold">{member.name}</p>
                     <p className="text-gray-600 font-semibold">
                       <span> {member.email}</span>

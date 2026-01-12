@@ -4,6 +4,11 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { apiFetch } from "@/lib/api";
 import { setToken } from "@/lib/auth";
+import { BookOpen } from "lucide-react";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { setUserEmail, setUserId, setUsername, setUserRole } from "@/lib/user";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -24,6 +29,10 @@ export default function LoginPage() {
       });
 
       setToken(data.access_token);
+      setUserId(data.user.id);
+      setUsername(data.user.username);
+      setUserEmail(data.user.email);
+      setUserRole(data.user.role);
       router.push("/dashboard");
     } catch (err: any) {
       setError(err.message || "Login failed");
@@ -36,36 +45,65 @@ export default function LoginPage() {
     <div className="flex min-h-screen items-center justify-center bg-gray-100 dark:bg-gray-900">
       <form
         onSubmit={handleSubmit}
-        className="w-full max-w-sm rounded bg-white dark:bg-gray-800 p-6 shadow"
+        className="w-full max-w-md rounded bg-white dark:bg-gray-800 p-6 shadow space-y-5"
       >
-        <h1 className="mb-4 text-xl font-semibold">Login</h1>
-
-        {error && <p className="mb-3 text-sm text-red-600">{error}</p>}
-
-        <input
-          type="email"
-          placeholder="Email"
-          className="mb-3 w-full rounded border p-2"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
-
-        <input
-          type="password"
-          placeholder="Password"
-          className="mb-4 w-full rounded border p-2"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
-
-        <button
-          disabled={loading}
-          className="w-full rounded bg-blue-600 py-2 text-white hover:bg-blue-700 disabled:opacity-50"
-        >
-          {loading ? "Logging in..." : "Login"}
-        </button>
+        {/* logo */}
+        <div className="flex justify-center">
+          <BookOpen className="h-12 w-12 text-blue-600" />
+        </div>
+        {/* Title and description */}
+        <div className="flex flex-col items-center">
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+            Library Manager System
+          </h1>
+          <p className="text-base text-gray-600">Sign in to your account to continue</p>
+        </div>
+        {/* Email and Password Input Section */}
+        <div className="space-y-5">
+          {/* Email */}
+          <Label className="text-gray-800" htmlFor="email">Email</Label>
+          <Input 
+            type="email"
+            id="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="Enter your email"
+          />
+          {/* Password */}
+          <Label className="text-gray-800" htmlFor="password">Password</Label>
+          <Input 
+            type="password"
+            id="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            placeholder="Enter your password"
+          />
+          {/* Sign In Button */}
+          <Button type="submit" className="w-full" disabled={loading}>
+            {loading ? "Signing In..." : "Sign In"}
+          </Button>
+          {/* Error */}
+          {error && <p className="text-red-500">{error}</p>}
+          <hr />
+          {/* login Information */}
+          <div className="text-xs text-gray-600 space-y-2">
+            <p className="flex justify-center">
+              Test Credentials
+            </p>
+            <div className="flex justify-between items-center">
+              {/* type of account */}
+              <div className="space-y-1">
+                <p>Admin:</p>
+                <p>Librarian:</p>
+              </div>
+              {/* credentials */}
+              <div className="space-y-1">
+                <p>admin@gmail.com</p>
+                <p>librarian@gmail.com</p>
+              </div>
+            </div>
+          </div>
+          </div>
       </form>
     </div>
   );
