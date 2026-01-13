@@ -18,18 +18,17 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { apiFetch } from "@/lib/api";
+import { toast } from "sonner";
 
 interface BorrowBookProps {
   isOpen: boolean;
   onClose: () => void;
-  borrowBookData: any;
   onSuccess: () => void;
 }
 
 export default function BorrowBook({
   isOpen,
   onClose,
-  borrowBookData,
   onSuccess,
 }: BorrowBookProps) {
   const [books, setBooks] = useState([]);
@@ -48,7 +47,7 @@ export default function BorrowBook({
 
       setBooks(data);
     } catch (err: any) {
-      console.log(err);
+      toast.error(err.message);
     }
   };
 
@@ -61,7 +60,7 @@ export default function BorrowBook({
 
       setMembers(data);
     } catch (err: any) {
-      console.log(err);
+      toast.error(err.message);
     }
   };
 
@@ -83,8 +82,9 @@ export default function BorrowBook({
       });
       onClose();
       onSuccess();
+      toast.success("Book borrowed successfully");
     } catch (err: any) {
-      console.log(err);
+      toast.error(err.message || "Something went wrong");
     } finally {
       setLoading(false);
     }

@@ -20,6 +20,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { toast } from "sonner";
 
 interface EditModalProps {
   isOpen: boolean;
@@ -58,7 +59,7 @@ export default function EditModal({
       const genreData = await apiFetch("/genres");
       setGenres(genreData);
     } catch (err: any) {
-      console.log(err);
+      toast.error(err.message);
     }
   };
 
@@ -70,11 +71,11 @@ export default function EditModal({
 
   const handleSubmit = async () => {
     if (!title.trim()) {
-      console.log("Title is invalid or invalid type");
+      toast.error("Title is invalid or invalid type");
       return;
     }
     if (!author.trim()) {
-      console.log("Author is invalid or invalid type");
+      toast.error("Author is invalid or invalid type");
       return;
     }
 
@@ -92,8 +93,9 @@ export default function EditModal({
       });
       onClose();
       onSuccess();
+      toast.success("Book updated successfully");
     } catch (err: any) {
-      console.log(err);
+      toast.error(err.message || "Something went wrong");
     } finally {
       setLoading(false);
     }

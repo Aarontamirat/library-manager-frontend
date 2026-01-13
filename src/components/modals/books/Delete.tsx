@@ -10,16 +10,8 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { apiFetch } from "@/lib/api";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { toast } from "sonner";
 
 interface EditModalProps {
   isOpen: boolean;
@@ -48,6 +40,13 @@ export default function Delete({
 
   const handleSubmit = async () => {
     setLoading(true);
+
+    // Check id
+    if (!id) {
+      toast.error("Book Not Found");
+      return;
+    }
+
     try {
       const res = await apiFetch(`/books/${id}`, {
         method: "DELETE",
@@ -55,7 +54,7 @@ export default function Delete({
       onClose();
       onSuccess();
     } catch (err: any) {
-      console.log(err);
+      toast.error(err.message || "Something went wrong");
     } finally {
       setLoading(false);
     }

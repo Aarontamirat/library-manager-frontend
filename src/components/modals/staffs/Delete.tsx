@@ -55,7 +55,7 @@ export default function Delete({
       onSuccess();
       toast.success("Member deleted successfully");
     } catch (err: any) {
-      toast.error(err.message);
+      toast.error(err.message || "Something went wrong");
     } finally {
       setLoading(false);
     }

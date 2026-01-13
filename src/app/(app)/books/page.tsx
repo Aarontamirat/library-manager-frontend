@@ -21,6 +21,7 @@ import Add from "@/components/modals/books/Add";
 import View from "@/components/modals/books/View";
 import EditModal from "@/components/modals/books/Edit";
 import Delete from "@/components/modals/books/Delete";
+import { getUserRole } from "@/lib/user";
 
 export default function Books() {
   const [books, setBooks] = useState([]);
@@ -55,6 +56,8 @@ export default function Books() {
       book.genre.name.toLowerCase().includes(search.toLowerCase())
     );
   });
+
+  const userRole = getUserRole();
 
   return (
     <div className="space-y-6">
@@ -156,16 +159,18 @@ export default function Books() {
                   <Edit className="w-6 h-6" />
                 </Button>
                 {/* Delete Button */}
-                <Button
-                  onClick={() => {
-                    setIsDeleteModalOpen(true);
-                    setSelectedBook(book.id);
-                  }}
-                  variant={"outline"}
-                  size={"icon-lg"}
-                >
-                  <Trash2 className="w-6 h-6" />
-                </Button>
+                {userRole == "admin" && (
+                  <Button
+                    onClick={() => {
+                      setIsDeleteModalOpen(true);
+                      setSelectedBook(book.id);
+                    }}
+                    variant={"outline"}
+                    size={"icon-lg"}
+                  >
+                    <Trash2 className="w-6 h-6" />
+                  </Button>
+                )}
               </div>
             </div>
           );
@@ -195,12 +200,14 @@ export default function Books() {
       />
 
       {/* Delete Modal */}
-      <Delete
-        isOpen={isDeleteModalOpen}
-        onClose={() => setIsDeleteModalOpen(false)}
-        bookData={books.find((book: any) => book.id === selectedBook)}
-        onSuccess={fetchBooks}
-      />
+      {userRole == "admin" && (
+        <Delete
+          isOpen={isDeleteModalOpen}
+          onClose={() => setIsDeleteModalOpen(false)}
+          bookData={books.find((book: any) => book.id === selectedBook)}
+          onSuccess={fetchBooks}
+        />
+      )}
     </div>
   );
 }

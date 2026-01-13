@@ -23,5 +23,8 @@ export async function apiFetch(endpoint: string, options: RequestInit = {}) {
     throw new Error(error.message || "API Error");
   }
 
-  return res.json();
+  // if Method sent is not DELETE, do not execute json
+  if (options.method !== "DELETE") return res.json();
+
+  return res;
 }

@@ -166,13 +166,11 @@ export default function Books() {
       <BorrowBook
         isOpen={isBorrowModalOpen}
         onClose={() => setIsBorrowModalOpen(false)}
-        borrowBookData={borrowRecords}
         onSuccess={() => fetchBorrowRecords()}
       ></BorrowBook>
       <ReturnBook
         isOpen={isReturnModalOpen}
         onClose={() => setIsReturnModalOpen(false)}
-        borrowBookData={borrowRecords}
         onSuccess={() => fetchBorrowRecords()}
       ></ReturnBook>
     </div>

@@ -65,7 +65,7 @@ export default function EditModal({
       onSuccess();
       toast.success("Genre updated successfully");
     } catch (err: any) {
-      toast.error(err.message);
+      toast.error(err.message || "Something went wrong");
     } finally {
       setLoading(false);
     }

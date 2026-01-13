@@ -20,6 +20,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { toast } from "sonner";
 
 interface AddModalProps {
   isOpen: boolean;
@@ -50,7 +51,7 @@ export default function Add({ isOpen, onClose, onSuccess }: AddModalProps) {
       const genreData = await apiFetch("/genres");
       setGenres(genreData);
     } catch (err: any) {
-      console.log(err);
+      toast.error(err);
     }
   };
 
@@ -60,11 +61,11 @@ export default function Add({ isOpen, onClose, onSuccess }: AddModalProps) {
 
   const handleSubmit = async () => {
     if (!title.trim()) {
-      console.log("Title is invalid or invalid type");
+      toast.error("Title is invalid or invalid type");
       return;
     }
     if (!author.trim()) {
-      console.log("Author is invalid or invalid type");
+      toast.error("Author is invalid or invalid type");
       return;
     }
 
@@ -82,8 +83,9 @@ export default function Add({ isOpen, onClose, onSuccess }: AddModalProps) {
       });
       onClose();
       onSuccess();
+      toast.success("Book added successfully");
     } catch (err: any) {
-      console.log(err);
+      toast.error(err.message || "Something went wrong");
     } finally {
       setLoading(false);
     }

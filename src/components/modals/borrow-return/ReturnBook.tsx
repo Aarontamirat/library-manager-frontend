@@ -17,23 +17,20 @@ import {
 } from "@/components/ui/select";
 import { apiFetch } from "@/lib/api";
 import { useEffect, useState } from "react";
+import { toast } from "sonner";
 
 interface returnBookProps {
   isOpen: boolean;
   onClose: () => void;
-  borrowBookData: any;
   onSuccess: () => void;
 }
 
 export default function ReturnBook({
   isOpen,
   onClose,
-  borrowBookData,
   onSuccess,
 }: returnBookProps) {
   const [books, setBooks] = useState([]);
-  const [bookId, setBookId] = useState("");
-  const [returnDate, setReturnDate] = useState("");
   const [borrowRecordId, setBorrowRecordId] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -52,7 +49,7 @@ export default function ReturnBook({
 
       setBooks(borrowedRecords);
     } catch (err: any) {
-      console.log(err);
+      toast.error(err.message);
     }
   };
 
@@ -76,12 +73,12 @@ export default function ReturnBook({
           borrow_record_id: borrowRecordId,
         }),
       });
-      setBookId("");
       setBorrowRecordId("");
       onClose();
       onSuccess();
+      toast.success("Book returned successfully");
     } catch (err: any) {
-      console.log(err);
+      toast.error(err.message || "Something went wrong");
     } finally {
       setLoading(false);
     }

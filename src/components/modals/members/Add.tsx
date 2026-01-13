@@ -74,7 +74,7 @@ export default function Add({ isOpen, onClose, onSuccess }: AddModalProps) {
       onSuccess();
       toast.success("Member added successfully");
     } catch (err: any) {
-      toast.error(err);
+      toast.error(err.message || "Something went wrong");
     } finally {
       setLoading(false);
     }

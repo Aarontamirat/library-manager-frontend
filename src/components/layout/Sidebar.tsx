@@ -3,11 +3,12 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { sidebarMenu } from "./sidebarMenu";
-
-const MOCK_ROLE = "admin"; // temporary
+import { getUserRole } from "@/lib/user";
 
 export default function Sidebar() {
   const pathname = usePathname();
+
+  const userRole = getUserRole();
 
   return (
     <aside className="w-64 border-r border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800">
@@ -17,7 +18,7 @@ export default function Sidebar() {
 
       <nav className="py-2 space-y-2 px-4">
         {sidebarMenu
-          .filter((item) => item.roles.includes(MOCK_ROLE))
+          .filter((item) => item.roles.includes(userRole || ""))
           .map((item) => {
             return (
               <Link

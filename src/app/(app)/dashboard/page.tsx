@@ -4,12 +4,12 @@ import { apiFetch } from "@/lib/api";
 import {
   AlertTriangle,
   ArrowLeftRight,
-  Book,
   BookOpen,
   ChartColumn,
   Plus,
   Settings,
   Shield,
+  User,
   Users,
 } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -98,27 +98,65 @@ export default function DashboardPage() {
       {/* Header */}
       <div className="h-20">
         <div className="flex items-center space-x-2">
-          <h1 className="text-3xl font-bold">Admin Dashboard</h1>
-          <div className="flex items-center justify-center space-x-1 px-3 py-0.5 text-xs font-bold rounded-full bg-red-500 text-white">
-            <Shield className="w-3 h-3" />
-            <p className="">{userRole == 'admin' ? 'ADMINISTRATOR' : 'Librarian'}</p>
+          <h1 className="text-3xl font-bold">
+            {userRole == "admin" ? "Admin" : "Librarian"} Dashboard
+          </h1>
+          <div
+            className={`flex items-center justify-center space-x-1 px-3 py-0.5 text-xs font-bold rounded-full ${
+              userRole == "admin"
+                ? "bg-red-500 dark:bg-red-400"
+                : "bg-black dark:bg-neutral-200 dark:text-gray-900"
+            } text-white`}
+          >
+            {userRole == "admin" ? (
+              <Shield className="w-3 h-3" />
+            ) : (
+              <User className="w-3 h-3" />
+            )}
+
+            <p>{userRole == "admin" ? "ADMINISTRATOR" : "LIBRARIAN"}</p>
           </div>
         </div>
         <p className="text-gray-500">
-          Full system access – Manage all library operations
+          {userRole == "admin"
+            ? "Full system access – Manage all library operations"
+            : "Standard library operations - Books, members, and borrowing"}
         </p>
       </div>
 
       {/* Alert */}
-      <div className="flex items-center rounded-lg border border-red-300 bg-red-300/20 p-4">
-        <Shield className="h-8 w-8 text-red-800 dark:text-red-400" />
+      <div
+        className={`flex items-center rounded-lg border ${
+          userRole == "admin"
+            ? "border-red-300 bg-red-300/20 "
+            : "border-green-300 bg-green-300/20 "
+        } p-4`}
+      >
+        {userRole == "admin" ? (
+          <Shield className="h-8 w-8 text-red-800 dark:text-red-400" />
+        ) : (
+          <User className="h-8 w-8 text-green-800 dark:text-green-400" />
+        )}
         <div>
-          <p className="px-4 text-lg font-semibold text-red-900 dark:text-red-400">
-            Administrator Access
+          <p
+            className={`px-4 text-lg font-semibold ${
+              userRole == "admin"
+                ? "text-red-900 dark:text-red-400"
+                : "text-green-900 dark:text-green-400"
+            } `}
+          >
+            {userRole == "admin" ? "Administrator" : "Librarian"} Access
           </p>
-          <p className="px-4 text-sm text-red-700 dark:text-red-300">
-            You have full system privileges including delete operations, genre
-            management, and staff administration.
+          <p
+            className={`px-4 text-sm ${
+              userRole == "admin"
+                ? "text-red-700 dark:text-red-300"
+                : "text-green-700 dark:text-green-300"
+            } `}
+          >
+            {userRole == "admin"
+              ? "You have full system privileges including delete operations, genre management, and staff administration."
+              : "You can manage books and members, handle borrowing operations, and view reports. Contact admin for advanced operations."}
           </p>
         </div>
       </div>
@@ -131,9 +169,11 @@ export default function DashboardPage() {
             <BookOpen className="h-4 w-4 text-gray-600" />
           </div>
           <p className="mt-2 text-2xl font-bold">{totalBooks}</p>
-          <p className="text-xs text-gray-500 dark:text-gray-600">
-            All books in system
-          </p>
+          {userRole == "admin" && (
+            <p className="text-xs text-gray-500 dark:text-gray-600">
+              All books in system
+            </p>
+          )}
         </div>
         <div className="px-5 py-6 rounded-lg border border-gray-300 dark:border-gray-700">
           <div className="flex justify-between items-center">
@@ -165,7 +205,11 @@ export default function DashboardPage() {
         {/* Header */}
         <div className="">
           <h2 className="text-2xl font-semibold">Quick Actions</h2>
-          <p className="text-gray-500">Administartive and library operations</p>
+          <p className="text-gray-500">
+            {userRole == "admin"
+              ? "Administartive and library operations"
+              : "Common library operations"}
+          </p>
         </div>
 
         {/* Cards that Link to routes */}
@@ -206,43 +250,31 @@ export default function DashboardPage() {
             </div>
           </Link>
 
-          <Link href="/genres">
-            <div className="px-5 py-4 rounded-lg border border-red-300 bg-red-300/20 text-red-700 dark:border-red-500/40 dark:bg-red-500/10 dark:text-red-400">
-              <div className="flex flex-col items-center gap-4">
-                <Settings className="h-4 w-4" />
-                <h2 className="text-sm font-semibold">Manage Genres</h2>
-              </div>
-            </div>
-          </Link>
+          {userRole == "admin" && (
+            <>
+              <Link href="/genres">
+                <div className="px-5 py-4 rounded-lg border border-red-300 bg-red-300/20 text-red-700 dark:border-red-500/40 dark:bg-red-500/10 dark:text-red-400">
+                  <div className="flex flex-col items-center gap-4">
+                    <Settings className="h-4 w-4" />
+                    <h2 className="text-sm font-semibold">Manage Genres</h2>
+                  </div>
+                </div>
+              </Link>
 
-          <Link href="/reports">
-            <div className="px-5 py-4 rounded-lg border border-red-300 bg-red-300/20 text-red-700 dark:border-red-500/40 dark:bg-red-500/10 dark:text-red-400">
-              <div className="flex flex-col items-center gap-4">
-                <ChartColumn className="h-4 w-4" />
-                <h2 className="text-sm font-semibold">Admin Reports</h2>
-              </div>
-            </div>
-          </Link>
+              <Link href="/reports">
+                <div className="px-5 py-4 rounded-lg border border-red-300 bg-red-300/20 text-red-700 dark:border-red-500/40 dark:bg-red-500/10 dark:text-red-400">
+                  <div className="flex flex-col items-center gap-4">
+                    <ChartColumn className="h-4 w-4" />
+                    <h2 className="text-sm font-semibold">Admin Reports</h2>
+                  </div>
+                </div>
+              </Link>
+            </>
+          )}
         </div>
       </div>
 
       {/* Recent Activity */}
-      <div className="p-6 rounded-lg bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700">
-        {/* Header */}
-        <div className="">
-          <h2 className="text-2xl font-semibold">Recent Activity</h2>
-          <p className="text-gray-500">System-wide borrow and return operations</p>
-        </div>
-        <div className="flex flex-col gap-4 py-6">
-          <div className="flex items-center gap-4">
-            <div className="w-12 h-12 rounded-lg bg-gray-300 dark:bg-gray-700" />
-            <div className="flex flex-col">
-              <h2 className="text-lg font-semibold">John Doe</h2>
-              <p className="text-gray-500">Borrowed a book</p>
-            </div>
-          </div>
-        </div>
-      </div>
     </div>
   );
 }

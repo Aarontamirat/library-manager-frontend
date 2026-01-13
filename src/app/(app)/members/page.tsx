@@ -1,15 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import {
-  Edit,
-  Eye,
-  Filter,
-  Plus,
-  SearchIcon,
-  Trash,
-  Trash2,
-} from "lucide-react";
+import { Edit, Eye, History, Plus, SearchIcon, Trash2 } from "lucide-react";
 import {
   InputGroup,
   InputGroupAddon,
@@ -21,6 +13,8 @@ import Add from "@/components/modals/members/Add";
 import View from "@/components/modals/members/View";
 import EditModal from "@/components/modals/members/Edit";
 import Delete from "@/components/modals/members/Delete";
+import HistoryView from "@/components/modals/members/HistoryView";
+import { getUserRole } from "@/lib/user";
 
 export default function Members() {
   const [members, setMembers] = useState([]);
@@ -31,6 +25,7 @@ export default function Members() {
   const [selectedMember, setSelectedMember] = useState<any>(null);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [isHistoryViewModalOpen, setIsHistoryViewModalOpen] = useState(false);
 
   const fetchMembers = async () => {
     // Get books
@@ -78,6 +73,8 @@ export default function Members() {
         record.member_id === memberId && record.return_date === null
     ).length;
   };
+
+  const userRole = getUserRole();
 
   return (
     <div className="space-y-6">
@@ -149,7 +146,7 @@ export default function Members() {
                 </p>
                 <p className="font-semibold text-gray-600">
                   Active Borrows:{" "}
-                  <span className="text-gray-500">{member.phone}</span>
+                  <span className="text-gray-500">{borrowed}</span>
                 </p>
               </div>
               {/* actions like view, edit and delete */}
@@ -165,6 +162,17 @@ export default function Members() {
                 >
                   <Eye className="w-6 h-6" />
                 </Button>
+                {/* Borrowing History Button */}
+                <Button
+                  onClick={() => {
+                    setIsHistoryViewModalOpen(true);
+                    setSelectedMember(member.id);
+                  }}
+                  variant={"outline"}
+                  size={"icon-lg"}
+                >
+                  <History className="w-6 h-6" />
+                </Button>
                 {/* Edit Button */}
                 <Button
                   onClick={() => {
@@ -177,16 +185,18 @@ export default function Members() {
                   <Edit className="w-6 h-6" />
                 </Button>
                 {/* Delete Button */}
-                <Button
-                  onClick={() => {
-                    setIsDeleteModalOpen(true);
-                    setSelectedMember(member.id);
-                  }}
-                  variant={"outline"}
-                  size={"icon-lg"}
-                >
-                  <Trash2 className="w-6 h-6" />
-                </Button>
+                {userRole == "admin" && (
+                  <Button
+                    onClick={() => {
+                      setIsDeleteModalOpen(true);
+                      setSelectedMember(member.id);
+                    }}
+                    variant={"outline"}
+                    size={"icon-lg"}
+                  >
+                    <Trash2 className="w-6 h-6" />
+                  </Button>
+                )}
               </div>
             </div>
           );
@@ -208,6 +218,13 @@ export default function Members() {
         borrowedCount={borrowedCount(selectedMember)}
       />
 
+      {/* History Modal */}
+      <HistoryView
+        isOpen={isHistoryViewModalOpen}
+        onClose={() => setIsHistoryViewModalOpen(false)}
+        memberData={members.find((member: any) => member.id === selectedMember)}
+      />
+
       {/* Edit Modal */}
       <EditModal
         isOpen={isEditModalOpen}
@@ -217,12 +234,16 @@ export default function Members() {
       />
 
       {/* Delete Modal */}
-      <Delete
-        isOpen={isDeleteModalOpen}
-        onClose={() => setIsDeleteModalOpen(false)}
-        memberData={members.find((member: any) => member.id === selectedMember)}
-        onSuccess={fetchMembers}
-      />
+      {userRole == "admin" && (
+        <Delete
+          isOpen={isDeleteModalOpen}
+          onClose={() => setIsDeleteModalOpen(false)}
+          memberData={members.find(
+            (member: any) => member.id === selectedMember
+          )}
+          onSuccess={fetchMembers}
+        />
+      )}
     </div>
   );
 }
