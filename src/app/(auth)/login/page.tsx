@@ -9,6 +9,7 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { setUserEmail, setUserId, setUsername, setUserRole } from "@/lib/user";
+import { toast } from "sonner";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -33,9 +34,11 @@ export default function LoginPage() {
       setUsername(data.user.username);
       setUserEmail(data.user.email);
       setUserRole(data.user.role);
+      toast.success("Login successful");
       router.push("/dashboard");
     } catch (err: any) {
       setError(err.message || "Login failed");
+      toast.error("Login failed");
     } finally {
       setLoading(false);
     }
@@ -56,13 +59,17 @@ export default function LoginPage() {
           <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
             Library Manager System
           </h1>
-          <p className="text-base text-gray-600">Sign in to your account to continue</p>
+          <p className="text-base text-gray-600">
+            Sign in to your account to continue
+          </p>
         </div>
         {/* Email and Password Input Section */}
         <div className="space-y-5">
           {/* Email */}
-          <Label className="text-gray-800" htmlFor="email">Email</Label>
-          <Input 
+          <Label className="text-gray-800" htmlFor="email">
+            Email
+          </Label>
+          <Input
             type="email"
             id="email"
             value={email}
@@ -70,8 +77,10 @@ export default function LoginPage() {
             placeholder="Enter your email"
           />
           {/* Password */}
-          <Label className="text-gray-800" htmlFor="password">Password</Label>
-          <Input 
+          <Label className="text-gray-800" htmlFor="password">
+            Password
+          </Label>
+          <Input
             type="password"
             id="password"
             value={password}
@@ -87,9 +96,7 @@ export default function LoginPage() {
           <hr />
           {/* login Information */}
           <div className="text-xs text-gray-600 space-y-2">
-            <p className="flex justify-center">
-              Test Credentials
-            </p>
+            <p className="flex justify-center">Test Credentials</p>
             <div className="flex justify-between items-center">
               {/* type of account */}
               <div className="space-y-1">
@@ -103,7 +110,7 @@ export default function LoginPage() {
               </div>
             </div>
           </div>
-          </div>
+        </div>
       </form>
     </div>
   );
