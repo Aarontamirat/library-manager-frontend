@@ -16,14 +16,14 @@ import { toast } from "sonner";
 interface EditModalProps {
   isOpen: boolean;
   onClose: () => void;
-  memberData: any;
+  genreData: any;
   onSuccess: () => void;
 }
 
 export default function Delete({
   isOpen,
   onClose,
-  memberData,
+  genreData,
   onSuccess,
 }: EditModalProps) {
   const [id, setId] = useState("");
@@ -31,22 +31,22 @@ export default function Delete({
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    if (!memberData) return;
-    setId(memberData.id);
-    setName(memberData.name);
-  }, [memberData, isOpen]);
+    if (!genreData) return;
+    setId(genreData.id);
+    setName(genreData.name);
+  }, [genreData, isOpen]);
 
-  if (!memberData) return null;
+  if (!genreData) return null;
 
   const handleSubmit = async () => {
     setLoading(true);
     try {
-      const res = await apiFetch(`/members/${id}`, {
+      const res = await apiFetch(`/genres/${id}`, {
         method: "DELETE",
       });
       onClose();
       onSuccess();
-      toast.success("Member deleted successfully");
+      toast.success("Genre deleted successfully");
     } catch (err: any) {
       toast.error(err.message);
     } finally {
@@ -67,9 +67,9 @@ export default function Delete({
     "
       >
         <DialogHeader>
-          <DialogTitle className="text-xl">Delete Member</DialogTitle>
+          <DialogTitle className="text-xl">Delete Genre</DialogTitle>
           <DialogDescription className="text-gray-600 dark:text-gray-300 text-base">
-            Delete member
+            Delete genre
           </DialogDescription>
         </DialogHeader>
 

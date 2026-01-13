@@ -18,71 +18,52 @@ import { toast } from "sonner";
 interface EditModalProps {
   isOpen: boolean;
   onClose: () => void;
-  memberData: any;
+  genreData: any;
   onSuccess: () => void;
 }
 
 export default function EditModal({
   isOpen,
   onClose,
-  memberData,
+  genreData,
   onSuccess,
 }: EditModalProps) {
   const [id, setId] = useState("");
   const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState("");
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    if (!memberData) return;
-    setId(memberData.id);
-    setName(memberData.name);
-    setEmail(memberData.email);
-    setPhoneNumber(memberData.phone);
-  }, [memberData, isOpen]);
+    if (!genreData) return;
+    setId(genreData.id);
+    setName(genreData.name);
+  }, [genreData, isOpen]);
 
-  if (!memberData) return null;
+  if (!genreData) return null;
 
   const handleSubmit = async () => {
-    // Check full name
+    // Check id exists
+    if (!id) {
+      toast.error("Genre Not Found");
+      return;
+    }
+
+    // Check genre name
     if (!name.trim()) {
-      toast.error("Full name is required");
-      return;
-    }
-
-    // Check email
-    if (!email.trim()) {
-      toast.error("Email is required");
-      return;
-    }
-
-    // Check email validity
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-      toast.error("Invalid email format");
-      return;
-    }
-
-    // Check phone number
-    if (!phoneNumber.trim()) {
-      toast.error("Phone number is required");
+      toast.error("Genre name is required");
       return;
     }
 
     setLoading(true);
     try {
-      const res = await apiFetch(`/members/${id}`, {
+      const res = await apiFetch(`/genres/${id}`, {
         method: "PATCH",
         body: JSON.stringify({
           name,
-          email,
-          phone: phoneNumber,
         }),
       });
       onClose();
       onSuccess();
-      toast.success("Member updated successfully");
+      toast.success("Genre updated successfully");
     } catch (err: any) {
       toast.error(err.message);
     } finally {
@@ -103,9 +84,9 @@ export default function EditModal({
     "
       >
         <DialogHeader>
-          <DialogTitle>Edit Member</DialogTitle>
+          <DialogTitle>Edit Genre</DialogTitle>
           <DialogDescription className="text-gray-600 dark:text-gray-300">
-            Edit member information
+            Edit genre information
           </DialogDescription>
         </DialogHeader>
 
@@ -113,38 +94,10 @@ export default function EditModal({
         <div className="space-y-4 mt-3">
           {/* name */}
           <div>
-            <Label className="block text-lg font-medium mb-1">Full Name</Label>
+            <Label className="block text-lg font-medium mb-1">Genre Name</Label>
             <Input
               value={name}
               onChange={(e) => setName(e.target.value)}
-              className="
-              bg-white dark:bg-gray-800 
-              border border-slate-300 dark:border-gray-700
-            "
-            />
-          </div>
-
-          {/* email */}
-          <div>
-            <Label className="block text-lg font-medium mb-1">Email</Label>
-            <Input
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="
-              bg-white dark:bg-gray-800 
-              border border-slate-300 dark:border-gray-700
-            "
-            />
-          </div>
-
-          {/* phoneNumber */}
-          <div>
-            <Label className="block text-lg font-medium mb-1">
-              Phone Number
-            </Label>
-            <Input
-              value={phoneNumber}
-              onChange={(e) => setPhoneNumber(e.target.value)}
               className="
               bg-white dark:bg-gray-800 
               border border-slate-300 dark:border-gray-700
@@ -203,7 +156,7 @@ export default function EditModal({
               </svg>
             )}
 
-            {loading ? "Saving..." : "Save"}
+            {loading ? "Updating..." : "Update Genre"}
           </Button>
         </DialogFooter>
       </DialogContent>

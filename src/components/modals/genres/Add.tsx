@@ -15,76 +15,40 @@ import { Label } from "@/components/ui/label";
 import { apiFetch } from "@/lib/api";
 import { toast } from "sonner";
 
-interface EditModalProps {
+interface AddModalProps {
   isOpen: boolean;
   onClose: () => void;
-  memberData: any;
   onSuccess: () => void;
 }
 
-export default function EditModal({
-  isOpen,
-  onClose,
-  memberData,
-  onSuccess,
-}: EditModalProps) {
-  const [id, setId] = useState("");
+export default function Add({ isOpen, onClose, onSuccess }: AddModalProps) {
   const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState("");
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    if (!memberData) return;
-    setId(memberData.id);
-    setName(memberData.name);
-    setEmail(memberData.email);
-    setPhoneNumber(memberData.phone);
-  }, [memberData, isOpen]);
-
-  if (!memberData) return null;
+    setName("");
+  }, [isOpen]);
 
   const handleSubmit = async () => {
-    // Check full name
+    // Check genre name
     if (!name.trim()) {
-      toast.error("Full name is required");
-      return;
-    }
-
-    // Check email
-    if (!email.trim()) {
-      toast.error("Email is required");
-      return;
-    }
-
-    // Check email validity
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-      toast.error("Invalid email format");
-      return;
-    }
-
-    // Check phone number
-    if (!phoneNumber.trim()) {
-      toast.error("Phone number is required");
+      toast.error("Genre name is required");
       return;
     }
 
     setLoading(true);
     try {
-      const res = await apiFetch(`/members/${id}`, {
-        method: "PATCH",
+      const res = await apiFetch("/genres", {
+        method: "POST",
         body: JSON.stringify({
           name,
-          email,
-          phone: phoneNumber,
         }),
       });
       onClose();
       onSuccess();
-      toast.success("Member updated successfully");
+      toast.success("Genre added successfully");
     } catch (err: any) {
-      toast.error(err.message);
+      toast.error(err.message || "Something went wrong");
     } finally {
       setLoading(false);
     }
@@ -103,48 +67,20 @@ export default function EditModal({
     "
       >
         <DialogHeader>
-          <DialogTitle>Edit Member</DialogTitle>
+          <DialogTitle>Add New Genre</DialogTitle>
           <DialogDescription className="text-gray-600 dark:text-gray-300">
-            Edit member information
+            Add new genre information
           </DialogDescription>
         </DialogHeader>
 
         {/* CONTENT */}
         <div className="space-y-4 mt-3">
-          {/* name */}
+          {/* Name */}
           <div>
-            <Label className="block text-lg font-medium mb-1">Full Name</Label>
+            <Label className="block text-lg font-medium mb-1">Genre Name</Label>
             <Input
               value={name}
               onChange={(e) => setName(e.target.value)}
-              className="
-              bg-white dark:bg-gray-800 
-              border border-slate-300 dark:border-gray-700
-            "
-            />
-          </div>
-
-          {/* email */}
-          <div>
-            <Label className="block text-lg font-medium mb-1">Email</Label>
-            <Input
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="
-              bg-white dark:bg-gray-800 
-              border border-slate-300 dark:border-gray-700
-            "
-            />
-          </div>
-
-          {/* phoneNumber */}
-          <div>
-            <Label className="block text-lg font-medium mb-1">
-              Phone Number
-            </Label>
-            <Input
-              value={phoneNumber}
-              onChange={(e) => setPhoneNumber(e.target.value)}
               className="
               bg-white dark:bg-gray-800 
               border border-slate-300 dark:border-gray-700

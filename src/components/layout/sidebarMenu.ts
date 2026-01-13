@@ -36,20 +36,20 @@ export const sidebarMenu = [
   },
   {
     label: "Staff",
-    path: "/staff",
+    path: "/staffs",
     roles: ["admin"],
     icon: UserCog,
-  },
-  {
-    label: "Genres",
-    path: "/genres",
-    roles: ["admin"],
-    icon: ChartColumn,
   },
   {
     label: "Reports",
     path: "/reports",
     roles: ["admin"],
     icon: Tag,
+  },
+  {
+    label: "Genres",
+    path: "/genres",
+    roles: ["admin"],
+    icon: ChartColumn,
   },
 ];

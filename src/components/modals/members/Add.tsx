@@ -13,18 +13,11 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { apiFetch } from "@/lib/api";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { toast } from "sonner";
 
 interface AddModalProps {
   isOpen: boolean;
   onClose: () => void;
-  initialData?: any;
   onSuccess: () => void;
 }
 
@@ -43,26 +36,26 @@ export default function Add({ isOpen, onClose, onSuccess }: AddModalProps) {
   const handleSubmit = async () => {
     // Check full name
     if (!fullName.trim()) {
-      console.log("Full name is required");
+      toast.error("Full name is required");
       return;
     }
 
     // Check email
     if (!email.trim()) {
-      console.log("Email is required");
+      toast.error("Email is required");
       return;
     }
 
     // Check email validity
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
-      console.log("Invalid email format");
+      toast.error("Invalid email format");
       return;
     }
 
     // Check phone number
     if (!phoneNumber.trim()) {
-      console.log("Phone number is required");
+      toast.error("Phone number is required");
       return;
     }
 
@@ -79,8 +72,9 @@ export default function Add({ isOpen, onClose, onSuccess }: AddModalProps) {
       });
       onClose();
       onSuccess();
+      toast.success("Member added successfully");
     } catch (err: any) {
-      console.log(err);
+      toast.error(err);
     } finally {
       setLoading(false);
     }
@@ -109,7 +103,7 @@ export default function Add({ isOpen, onClose, onSuccess }: AddModalProps) {
         <div className="space-y-4 mt-3">
           {/* Name */}
           <div>
-            <label className="block text-lg font-medium mb-1">Full Name</label>
+            <Label className="block text-lg font-medium mb-1">Full Name</Label>
             <Input
               value={fullName}
               onChange={(e) => setFullName(e.target.value)}
@@ -122,7 +116,7 @@ export default function Add({ isOpen, onClose, onSuccess }: AddModalProps) {
 
           {/* Email */}
           <div>
-            <label className="block text-lg font-medium mb-1">Email</label>
+            <Label className="block text-lg font-medium mb-1">Email</Label>
             <Input
               value={email}
               onChange={(e) => setEmail(e.target.value)}
@@ -135,9 +129,9 @@ export default function Add({ isOpen, onClose, onSuccess }: AddModalProps) {
 
           {/* phone number */}
           <div>
-            <label className="block text-lg font-medium mb-1">
+            <Label className="block text-lg font-medium mb-1">
               Phone Number
-            </label>
+            </Label>
             <Input
               value={phoneNumber}
               onChange={(e) => setPhoneNumber(e.target.value)}

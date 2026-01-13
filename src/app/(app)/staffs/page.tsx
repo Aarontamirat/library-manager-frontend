@@ -17,14 +17,13 @@ import {
 } from "@/components/ui/input-group";
 import { useState, useEffect } from "react";
 import { apiFetch } from "@/lib/api";
-// import Add from "@/components/modals/staffs/Add";
-// import View from "@/components/modals/staffs/View";
-// import EditModal from "@/components/modals/staffs/Edit";
-// import Delete from "@/components/modals/staffs/Delete";
+import Add from "@/components/modals/staffs/Add";
+import View from "@/components/modals/staffs/View";
+import EditModal from "@/components/modals/staffs/Edit";
+import Delete from "@/components/modals/staffs/Delete";
 
 export default function Staffs() {
   const [staffs, setStaffs] = useState([]);
-  const [staffId, setStaffId] = useState("");
   const [search, setSearch] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
@@ -39,7 +38,7 @@ export default function Staffs() {
         method: "GET",
       });
 
-      setStaffs(data);
+      setStaffs(data.users);
     } catch (err: any) {
       console.log(err);
     }
@@ -96,8 +95,6 @@ export default function Staffs() {
       {/* Grid of 3 cards */}
       <div className="grid grid-cols-3 gap-5 mt-6">
         {filteredStaffs.map((staff: any) => {
-          // get borrowed count
-          const borrowed = borrowedCount(staff.id);
           return (
             <div
               key={staff.id}
@@ -105,31 +102,35 @@ export default function Staffs() {
             >
               <div className="flex justify-between items-center">
                 <div className="flex flex-col items-baseline">
-                  <h3 className="text-lg font-semibold">{staff.name}</h3>
+                  <h3 className="text-lg font-semibold">{staff.username}</h3>
+                  <p className=" text-sm text-gray-500">{staff.email}</p>
                 </div>
-                {/* status */}
-                <span
-                  className={`text-sm text-gray-50 dark:text-gray-900 items-center ${
-                    borrowed != 0
-                      ? "bg-black dark:bg-white"
-                      : "bg-gray-300 dark:bg-gray-800 text-gray-800 dark:text-gray-100"
-                  } rounded-full px-2`}
-                >
-                  {staff ? `${borrowed} active` : `${borrowed} active`}
-                </span>
+                <div className="flex flex-col gap-1">
+                  {/* role */}
+                  <span
+                    className={`text-sm text-gray-50 dark:text-gray-900 items-center ${
+                      staff.role === "librarian"
+                        ? "bg-black dark:bg-white"
+                        : "bg-red-400 text-gray-100"
+                    } rounded-full px-2`}
+                  >
+                    {staff.role}
+                  </span>
+
+                  {/* status */}
+                  <span
+                    className={`text-sm bg-black dark:bg-white text-gray-50 dark:text-gray-900 items-center rounded-full px-2`}
+                  >
+                    active
+                  </span>
+                </div>
               </div>
-              <p className=" text-sm text-gray-500">{staff.email}</p>
               <div className="text-sm flex flex-col gap-2 mt-6">
                 <p className="font-semibold text-gray-600">
-                  role: <span className="text-gray-500">{staff.role}</span>
+                  Email: <span className="text-gray-500">{staff.email}</span>
                 </p>
                 <p className="font-semibold text-gray-600">
-                  Joined:{" "}
-                  <span className="text-gray-500">{staff.join_date}</span>
-                </p>
-                <p className="font-semibold text-gray-600">
-                  Active Borrows:{" "}
-                  <span className="text-gray-500">{staff.role}</span>
+                  Role: <span className="text-gray-500">{staff.role}</span>
                 </p>
               </div>
               {/* actions like view, edit and delete */}
@@ -177,7 +178,7 @@ export default function Staffs() {
       <Add
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
-        onSuccess={fetchMembers}
+        onSuccess={fetchStaffs}
       />
 
       {/* View Modal */}
@@ -185,7 +186,6 @@ export default function Staffs() {
         isOpen={isViewModalOpen}
         onClose={() => setIsViewModalOpen(false)}
         memberData={staffs.find((staff: any) => staff.id === selectedMember)}
-        borrowedCount={borrowedCount(selectedMember)}
       />
 
       {/* Edit Modal */}
@@ -193,7 +193,7 @@ export default function Staffs() {
         isOpen={isEditModalOpen}
         onClose={() => setIsEditModalOpen(false)}
         memberData={staffs.find((staff: any) => staff.id === selectedMember)}
-        onSuccess={fetchMembers}
+        onSuccess={fetchStaffs}
       />
 
       {/* Delete Modal */}
@@ -201,7 +201,7 @@ export default function Staffs() {
         isOpen={isDeleteModalOpen}
         onClose={() => setIsDeleteModalOpen(false)}
         memberData={staffs.find((staff: any) => staff.id === selectedMember)}
-        onSuccess={fetchMembers}
+        onSuccess={fetchStaffs}
       />
     </div>
   );

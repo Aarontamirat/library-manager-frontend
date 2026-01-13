@@ -13,6 +13,13 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { apiFetch } from "@/lib/api";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { toast } from "sonner";
 
 interface EditModalProps {
@@ -29,25 +36,27 @@ export default function EditModal({
   onSuccess,
 }: EditModalProps) {
   const [id, setId] = useState("");
-  const [name, setName] = useState("");
+  const [userName, setUserName] = useState("");
   const [email, setEmail] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [role, setRole] = useState("");
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (!memberData) return;
     setId(memberData.id);
-    setName(memberData.name);
+    setUserName(memberData.username);
     setEmail(memberData.email);
-    setPhoneNumber(memberData.phone);
+    setRole(memberData.role);
   }, [memberData, isOpen]);
 
   if (!memberData) return null;
 
   const handleSubmit = async () => {
     // Check full name
-    if (!name.trim()) {
-      toast.error("Full name is required");
+    if (!userName.trim()) {
+      toast.error("Username is required");
       return;
     }
 
@@ -64,25 +73,44 @@ export default function EditModal({
       return;
     }
 
-    // Check phone number
-    if (!phoneNumber.trim()) {
-      toast.error("Phone number is required");
+    // Check Password
+    if (!password.trim()) {
+      toast.error("Password is required");
+      return;
+    }
+
+    // Check confirm password
+    if (password !== confirmPassword) {
+      toast.error("Passwords do not match");
+      return;
+    }
+
+    // Check password and Confirm password match
+    if (password !== confirmPassword) {
+      toast.error("Passwords do not match");
+      return;
+    }
+
+    // Check role
+    if (!role.trim()) {
+      toast.error("Role is required");
       return;
     }
 
     setLoading(true);
     try {
-      const res = await apiFetch(`/members/${id}`, {
+      const res = await apiFetch(`/staff/${id}`, {
         method: "PATCH",
         body: JSON.stringify({
-          name,
+          username: userName,
           email,
-          phone: phoneNumber,
+          password,
+          role,
         }),
       });
       onClose();
       onSuccess();
-      toast.success("Member updated successfully");
+      toast.success("Staff member updated successfully");
     } catch (err: any) {
       toast.error(err.message);
     } finally {
@@ -103,9 +131,9 @@ export default function EditModal({
     "
       >
         <DialogHeader>
-          <DialogTitle>Edit Member</DialogTitle>
+          <DialogTitle>Edit Staff Member</DialogTitle>
           <DialogDescription className="text-gray-600 dark:text-gray-300">
-            Edit member information
+            Edit staff member information
           </DialogDescription>
         </DialogHeader>
 
@@ -113,10 +141,10 @@ export default function EditModal({
         <div className="space-y-4 mt-3">
           {/* name */}
           <div>
-            <Label className="block text-lg font-medium mb-1">Full Name</Label>
+            <label className="block text-lg font-medium mb-1">Username</label>
             <Input
-              value={name}
-              onChange={(e) => setName(e.target.value)}
+              value={userName}
+              onChange={(e) => setUserName(e.target.value)}
               className="
               bg-white dark:bg-gray-800 
               border border-slate-300 dark:border-gray-700
@@ -126,7 +154,7 @@ export default function EditModal({
 
           {/* email */}
           <div>
-            <Label className="block text-lg font-medium mb-1">Email</Label>
+            <label className="block text-lg font-medium mb-1">Email</label>
             <Input
               value={email}
               onChange={(e) => setEmail(e.target.value)}
@@ -137,14 +165,42 @@ export default function EditModal({
             />
           </div>
 
-          {/* phoneNumber */}
+          {/* Password */}
+          <div>
+            <Label className="block text-lg font-medium mb-1">Password</Label>
+            <Input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="
+              bg-white dark:bg-gray-800 
+              border border-slate-300 dark:border-gray-700
+            "
+            />
+          </div>
+
+          {/* Confirm Password */}
           <div>
             <Label className="block text-lg font-medium mb-1">
-              Phone Number
+              Confirm Password
             </Label>
             <Input
-              value={phoneNumber}
-              onChange={(e) => setPhoneNumber(e.target.value)}
+              type="password"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              className="
+              bg-white dark:bg-gray-800 
+              border border-slate-300 dark:border-gray-700
+            "
+            />
+          </div>
+
+          {/* Role */}
+          <div>
+            <Label className="block text-lg font-medium mb-1">Role</Label>
+            <Input
+              value={role}
+              onChange={(e) => setRole(e.target.value)}
               className="
               bg-white dark:bg-gray-800 
               border border-slate-300 dark:border-gray-700
@@ -203,7 +259,7 @@ export default function EditModal({
               </svg>
             )}
 
-            {loading ? "Saving..." : "Save"}
+            {loading ? "Updating..." : "Update Staff"}
           </Button>
         </DialogFooter>
       </DialogContent>

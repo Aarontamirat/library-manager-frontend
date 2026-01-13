@@ -27,22 +27,29 @@ export default function Delete({
   onSuccess,
 }: EditModalProps) {
   const [id, setId] = useState("");
-  const [name, setName] = useState("");
+  const [userName, setUserName] = useState("");
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (!memberData) return;
     setId(memberData.id);
-    setName(memberData.name);
+    setUserName(memberData.username);
   }, [memberData, isOpen]);
 
   if (!memberData) return null;
 
   const handleSubmit = async () => {
+    // Check id
+    if (!id) {
+      toast.error("Staff Member Not Found");
+      return;
+    }
+
     setLoading(true);
     try {
-      const res = await apiFetch(`/members/${id}`, {
+      const res = await apiFetch(`/staff/${id}`, {
         method: "DELETE",
+        body: JSON.stringify({ id }),
       });
       onClose();
       onSuccess();
@@ -67,16 +74,16 @@ export default function Delete({
     "
       >
         <DialogHeader>
-          <DialogTitle className="text-xl">Delete Member</DialogTitle>
+          <DialogTitle className="text-xl">Delete Staff Member</DialogTitle>
           <DialogDescription className="text-gray-600 dark:text-gray-300 text-base">
-            Delete member
+            Delete staff member
           </DialogDescription>
         </DialogHeader>
 
         {/* CONTENT */}
         <div className="space-y-4 mt-3">
           <p className="text-gray-500">
-            Are you sure you want to delete "{name}"? This action cannot be
+            Are you sure you want to delete "{userName}"? This action cannot be
             undone.
           </p>
         </div>

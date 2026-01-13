@@ -13,41 +13,42 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { apiFetch } from "@/lib/api";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { toast } from "sonner";
 
-interface EditModalProps {
+interface AddModalProps {
   isOpen: boolean;
   onClose: () => void;
-  memberData: any;
+  initialData?: any;
   onSuccess: () => void;
 }
 
-export default function EditModal({
-  isOpen,
-  onClose,
-  memberData,
-  onSuccess,
-}: EditModalProps) {
-  const [id, setId] = useState("");
-  const [name, setName] = useState("");
+export default function Add({ isOpen, onClose, onSuccess }: AddModalProps) {
+  const [userName, setUserName] = useState("");
   const [email, setEmail] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState("");
+  const [role, setRole] = useState("librarian");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    if (!memberData) return;
-    setId(memberData.id);
-    setName(memberData.name);
-    setEmail(memberData.email);
-    setPhoneNumber(memberData.phone);
-  }, [memberData, isOpen]);
-
-  if (!memberData) return null;
+    setUserName("");
+    setEmail("");
+    setRole("librarian");
+    setPassword("");
+    setConfirmPassword("");
+  }, [isOpen]);
 
   const handleSubmit = async () => {
     // Check full name
-    if (!name.trim()) {
-      toast.error("Full name is required");
+    if (!userName.trim()) {
+      toast.error("Username is required");
       return;
     }
 
@@ -64,27 +65,46 @@ export default function EditModal({
       return;
     }
 
-    // Check phone number
-    if (!phoneNumber.trim()) {
-      toast.error("Phone number is required");
+    // Check Role
+    if (!role.trim()) {
+      toast.error("Role is required");
+      return;
+    }
+
+    // Check Password
+    if (!password.trim()) {
+      toast.error("Password is required");
+      return;
+    }
+
+    // Check Confirm Password
+    if (!confirmPassword.trim()) {
+      toast.error("Confirm Password is required");
+      return;
+    }
+
+    // Check Password and Confirm Password
+    if (password !== confirmPassword) {
+      toast.error("Password and Confirm Password do not match");
       return;
     }
 
     setLoading(true);
     try {
-      const res = await apiFetch(`/members/${id}`, {
-        method: "PATCH",
+      const res = await apiFetch("/staff", {
+        method: "POST",
         body: JSON.stringify({
-          name,
+          username: userName,
           email,
-          phone: phoneNumber,
+          password,
+          role,
         }),
       });
       onClose();
       onSuccess();
-      toast.success("Member updated successfully");
+      toast.success("Staff member added successfully");
     } catch (err: any) {
-      toast.error(err.message);
+      toast.error(err.message || "Unknown error");
     } finally {
       setLoading(false);
     }
@@ -103,20 +123,20 @@ export default function EditModal({
     "
       >
         <DialogHeader>
-          <DialogTitle>Edit Member</DialogTitle>
+          <DialogTitle>Add New Staff Member</DialogTitle>
           <DialogDescription className="text-gray-600 dark:text-gray-300">
-            Edit member information
+            Enter the details for the new staff member
           </DialogDescription>
         </DialogHeader>
 
         {/* CONTENT */}
         <div className="space-y-4 mt-3">
-          {/* name */}
+          {/* Username */}
           <div>
-            <Label className="block text-lg font-medium mb-1">Full Name</Label>
+            <Label className="block text-lg font-medium mb-1">Username</Label>
             <Input
-              value={name}
-              onChange={(e) => setName(e.target.value)}
+              value={userName}
+              onChange={(e) => setUserName(e.target.value)}
               className="
               bg-white dark:bg-gray-800 
               border border-slate-300 dark:border-gray-700
@@ -124,9 +144,11 @@ export default function EditModal({
             />
           </div>
 
-          {/* email */}
+          {/* Email */}
           <div>
-            <Label className="block text-lg font-medium mb-1">Email</Label>
+            <Label className="block text-lg font-medium mb-1">
+              Email Address
+            </Label>
             <Input
               value={email}
               onChange={(e) => setEmail(e.target.value)}
@@ -137,14 +159,49 @@ export default function EditModal({
             />
           </div>
 
-          {/* phoneNumber */}
+          {/* Role */}
+          <div>
+            <Label className="block text-lg font-medium mb-1">Role</Label>
+            <Select value={role} onValueChange={setRole}>
+              <SelectTrigger
+                className="
+                          w-full mt-1  py-3
+                          bg-white dark:bg-gray-800 
+                          border border-slate-300 dark:border-gray-700
+                        "
+              >
+                <SelectValue placeholder="Select a role" />
+              </SelectTrigger>
+              <SelectContent className="bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100">
+                <SelectItem value="librarian">Librarian</SelectItem>
+                <SelectItem value="admin">Admin</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
+          {/* Password */}
+          <div>
+            <Label className="block text-lg font-medium mb-1">Password</Label>
+            <Input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="
+              bg-white dark:bg-gray-800 
+              border border-slate-300 dark:border-gray-700
+            "
+            />
+          </div>
+
+          {/* Confirm Password */}
           <div>
             <Label className="block text-lg font-medium mb-1">
-              Phone Number
+              Confirm Password
             </Label>
             <Input
-              value={phoneNumber}
-              onChange={(e) => setPhoneNumber(e.target.value)}
+              type="password"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
               className="
               bg-white dark:bg-gray-800 
               border border-slate-300 dark:border-gray-700
@@ -203,7 +260,7 @@ export default function EditModal({
               </svg>
             )}
 
-            {loading ? "Saving..." : "Save"}
+            {loading ? "Creating..." : "Create Staff"}
           </Button>
         </DialogFooter>
       </DialogContent>
