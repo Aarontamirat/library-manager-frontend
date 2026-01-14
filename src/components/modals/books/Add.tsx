@@ -51,7 +51,7 @@ export default function Add({ isOpen, onClose, onSuccess }: AddModalProps) {
       const genreData = await apiFetch("/genres");
       setGenres(genreData);
     } catch (err: any) {
-      toast.error(err);
+      toast.error(err.message || "Something went wrong");
     }
   };
 

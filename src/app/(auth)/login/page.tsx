@@ -105,8 +105,8 @@ export default function LoginPage() {
               </div>
               {/* credentials */}
               <div className="space-y-1">
-                <p>admin@gmail.com</p>
-                <p>librarian@gmail.com</p>
+                <p>admin@gmail.com/admin123</p>
+                <p>aaronlib@gmail.com/lib123</p>
               </div>
             </div>
           </div>

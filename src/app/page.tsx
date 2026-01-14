@@ -2,26 +2,30 @@
 
 import { useEffect, useState } from "react";
 import { apiFetch } from "@/lib/api";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
-  const [status, setStatus] = useState("Not connected");
+  const [isConnected, setIsConnected] = useState<boolean | null>(null);
+  const router = useRouter();
 
   useEffect(() => {
-    async function testConnection() {
+    const testConnection = async () => {
       try {
         await apiFetch("/auth/users");
-        setStatus("Connected to backend API");
+        setIsConnected(true);
       } catch {
-        setStatus("Failed to connect to backend");
+        setIsConnected(false);
       }
-    }
+    };
 
     testConnection();
   }, []);
 
-  return (
-    <main className="flex min-h-screen items-center justify-center gap-4">
-      <h2 className="text-2xl font-semibold">{status}</h2>
-    </main>
-  );
+  useEffect(() => {
+    if (isConnected === true) {
+      router.replace("/dashboard");
+    }
+  }, [isConnected, router]);
+
+  return null;
 }
