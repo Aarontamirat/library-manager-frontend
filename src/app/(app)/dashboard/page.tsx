@@ -97,8 +97,8 @@ export default function DashboardPage() {
     <div className="space-y-6">
       {/* Header */}
       <div className="h-20">
-        <div className="flex items-center space-x-2">
-          <h1 className="text-3xl font-bold">
+        <div className="md:flex items-center space-x-2">
+          <h1 className="text-2xl md:text-3xl font-bold">
             {userRole == "admin" ? "Admin" : "Librarian"} Dashboard
           </h1>
           <div
@@ -117,7 +117,7 @@ export default function DashboardPage() {
             <p>{userRole == "admin" ? "ADMINISTRATOR" : "LIBRARIAN"}</p>
           </div>
         </div>
-        <p className="text-gray-500">
+        <p className="text-sm md:text-base text-gray-500">
           {userRole == "admin"
             ? "Full system access – Manage all library operations"
             : "Standard library operations - Books, members, and borrowing"}
@@ -162,7 +162,7 @@ export default function DashboardPage() {
       </div>
 
       {/* 4 Cards */}
-      <div className="grid grid-cols-4 gap-6">
+      <div className="md:grid md:grid-cols-4 md:gap-6 space-y-6 md:space-y-0">
         <div className="px-5 py-6 rounded-lg border border-gray-300 dark:border-gray-700">
           <div className="flex justify-between items-center">
             <h2 className="font-semibold">Total Books</h2>
@@ -213,7 +213,7 @@ export default function DashboardPage() {
         </div>
 
         {/* Cards that Link to routes */}
-        <div className="grid grid-cols-4 gap-6 py-6">
+        <div className="flex flex-col md:grid md:grid-cols-4 md:gap-6 space-y-6 md:space-y-0 py-6">
           <Link href="/borrow-return">
             <div className="px-5 py-4 rounded-lg border border-gray-300 dark:border-gray-700 bg-gray-950 text-gray-200 dark:bg-gray-50 dark:text-gray-900">
               <div className="flex flex-col items-center gap-4">

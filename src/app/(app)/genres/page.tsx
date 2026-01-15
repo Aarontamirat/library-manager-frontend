@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { AlertCircle, Edit, Plus, SearchIcon, Trash2 } from "lucide-react";
+import { Edit, Plus, SearchIcon, Trash2 } from "lucide-react";
 import {
   InputGroup,
   InputGroupAddon,
@@ -19,7 +19,6 @@ export default function genres() {
   const [genres, setGenres] = useState([]);
   const [search, setSearch] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isViewModalOpen, setIsViewModalOpen] = useState(false);
   const [selectedMember, setSelectedMember] = useState<any>(null);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
@@ -50,7 +49,7 @@ export default function genres() {
     return (
       <div className="space-y-6">
         {/* Header */}
-        <div className="h-20 flex justify-between items-center">
+        <div className="md:h-20 h-32 flex flex-col md:flex-row justify-between items-center space-y-2">
           <div>
             <h1 className="text-3xl font-bold">Genre Management</h1>
             <p className="mt-1 text-gray-500">
@@ -84,7 +83,7 @@ export default function genres() {
         </div>
 
         {/* Grid of 3 cards */}
-        <div className="grid grid-cols-3 gap-5 mt-6">
+        <div className="md:grid md:grid-cols-3 space-y-6 md:space-y-0 md:gap-6 mt-6">
           {filteredGenres.map((genre: any) => {
             return (
               <div

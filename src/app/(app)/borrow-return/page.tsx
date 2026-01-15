@@ -1,24 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import {
-  ArrowLeftRight,
-  BookOpen,
-  Calendar,
-  Edit,
-  Eye,
-  Filter,
-  Plus,
-  SearchIcon,
-  Trash,
-  Trash2,
-  User,
-} from "lucide-react";
-import {
-  InputGroup,
-  InputGroupAddon,
-  InputGroupInput,
-} from "@/components/ui/input-group";
+import { ArrowLeftRight, BookOpen, Calendar, User } from "lucide-react";
 import { useState, useEffect } from "react";
 import { apiFetch } from "@/lib/api";
 import BorrowBook from "@/components/modals/borrow-return/BorrowBook";
@@ -49,16 +32,17 @@ export default function Books() {
   const now = new Date().toISOString().split("T")[0];
 
   return (
-    <div>
+    <div className="space-y-6">
       {/* Header */}
-      <div className="h-20 py-4 flex justify-between items-center">
+      <div className="h-36 flex justify-between items-center">
         <div>
-          <h1 className="text-2xl font-bold">Borrow & Return</h1>
+          <h1 className="text-3xl font-bold">Borrow & Return</h1>
           <p className="mt-1 text-gray-500">
             Manage book borrowing and return operations
           </p>
         </div>
-        <div className="text-base space-x-2">
+
+        <div className="flex flex-col text-base space-x-2 space-y-2">
           <Button
             variant="default"
             size="lg"

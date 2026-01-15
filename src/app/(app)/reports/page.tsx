@@ -174,7 +174,7 @@ export default function Members() {
           </div>
         </div>
         {/* Summary Report */}
-        <div className="grid grid-cols-3 gap-6">
+        <div className="md:grid md:grid-cols-3 space-y-6 md:space-y-0 md:gap-6">
           <div className="px-5 py-6 rounded-lg border border-gray-300 dark:border-gray-700">
             <div className="flex justify-between items-center">
               <h2 className="font-semibold">Total Borrows This Month</h2>

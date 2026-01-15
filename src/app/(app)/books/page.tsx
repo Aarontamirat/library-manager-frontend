@@ -96,7 +96,7 @@ export default function Books() {
       </div>
 
       {/* Grid of 3 cards */}
-      <div className="grid grid-cols-3 gap-5 mt-6">
+      <div className="flex flex-col md:grid md:grid-cols-3 md:gap-5 space-y-5 md:space-y-0 mt-6">
         {filteredBooks.map((book: any) => {
           const available = book.available_copies > 0;
           return (

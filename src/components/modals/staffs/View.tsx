@@ -43,7 +43,7 @@ export default function View({ isOpen, onClose, memberData }: ViewModalProps) {
         </DialogHeader>
 
         {/* CONTENT */}
-        <DialogContent className="space-y-4 text-xl">
+        <div className="space-y-4 text-xl">
           <div className="space-y-1">
             <div className="mb-8 text-xl">
               <h2 className="text-2xl font-bold">{userName}</h2>
@@ -73,7 +73,7 @@ export default function View({ isOpen, onClose, memberData }: ViewModalProps) {
               </div>
             </div>
           </div>
-        </DialogContent>
+        </div>
 
         {/* FOOTER */}
         <DialogFooter className="mt-4 flex justify-end space-x-2">

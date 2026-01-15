@@ -111,7 +111,7 @@ export default function Members() {
       </div>
 
       {/* Grid of 3 cards */}
-      <div className="grid grid-cols-3 gap-5 mt-6">
+      <div className="md:grid md:grid-cols-3 md:gap-5 space-y-5 md:space-y-0 mt-6">
         {filteredMembers.map((member: any) => {
           // get borrowed count
           const borrowed = borrowedCount(member.id);

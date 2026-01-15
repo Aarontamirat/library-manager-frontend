@@ -1,15 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import {
-  Edit,
-  Eye,
-  Filter,
-  Plus,
-  SearchIcon,
-  Trash,
-  Trash2,
-} from "lucide-react";
+import { Edit, Eye, Plus, SearchIcon, Trash2 } from "lucide-react";
 import {
   InputGroup,
   InputGroupAddon,
@@ -59,7 +51,7 @@ export default function Staffs() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="h-20 flex justify-between items-center">
+      <div className="h-36 flex justify-between items-center">
         <div>
           <h1 className="text-3xl font-bold">Staff Management</h1>
           <p className="mt-1 text-gray-500">
@@ -93,7 +85,7 @@ export default function Staffs() {
       </div>
 
       {/* Grid of 3 cards */}
-      <div className="grid grid-cols-3 gap-5 mt-6">
+      <div className="md:grid md:grid-cols-3 md:gap-5 space-y-6 md:space-y-0 mt-6">
         {filteredStaffs.map((staff: any) => {
           return (
             <div
