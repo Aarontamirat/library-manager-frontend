@@ -39,8 +39,8 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="md:flex h-screen">
-      <div className="">
-        <div className="absolute top-3 left-3 z-20 md:hidden">
+      <div className="fixed md:relative z-10">
+        <div className="fixed top-3 left-3 right-0 z-20 md:hidden">
           <Button
             className=""
             variant="secondary"
@@ -53,14 +53,18 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
           </Button>
         </div>
         <div
-          className={`absolute top-0 left-0 bottom-0 z-10 md:relative ${
+          className={`absolute top-0 left-0 bottom-0 md:relative ${
             menuOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"
           }  transition-all ease-in-out duration-1300`}
         >
           <Sidebar />
         </div>
       </div>
-      <div className="md:flex md:flex-1 md:flex-col">
+      <div
+        className={`md:flex md:flex-1 md:flex-col ${
+          menuOpen && "brightness-50 md:brightness-100"
+        }`}
+      >
         <Topbar />
         <main className="flex-1 overflow-y-auto bg-gray-50 dark:bg-gray-800 p-6">
           {children}
