@@ -15,12 +15,14 @@ import {
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { getUserRole } from "@/lib/user";
+import { DNA } from "react-loader-spinner";
 
 export default function DashboardPage() {
   const [books, setBooks] = useState([]);
   const [members, setMembers] = useState([]);
   const [borrows, setBorrows] = useState([]);
   const [overdueBooks, setOverdueBooks] = useState([]);
+  const [dataFetching, setDataFetching] = useState(false);
 
   // Total books
   const totalBooks = books.length;
@@ -32,6 +34,7 @@ export default function DashboardPage() {
   const totalOverdueBooks = overdueBooks.length;
 
   async function fetchBooks() {
+    setDataFetching(true);
     // Get books
     try {
       const data = await apiFetch("/books", {
@@ -41,10 +44,13 @@ export default function DashboardPage() {
       setBooks(data);
     } catch (err: any) {
       console.log(err);
+    } finally {
+      setDataFetching(false);
     }
   }
 
   async function fetchMembers() {
+    setDataFetching(true);
     // Get members
     try {
       const data = await apiFetch("/members", {
@@ -54,10 +60,13 @@ export default function DashboardPage() {
       setMembers(data);
     } catch (err: any) {
       console.log(err);
+    } finally {
+      setDataFetching(false);
     }
   }
 
   async function fetchBorrows() {
+    setDataFetching(true);
     // Get borrows
     try {
       const data = await apiFetch("/borrow-records", {
@@ -67,10 +76,13 @@ export default function DashboardPage() {
       setBorrows(data);
     } catch (err: any) {
       console.log(err);
+    } finally {
+      setDataFetching(false);
     }
   }
 
   async function fetchOverdueBooks() {
+    setDataFetching(true);
     // Get overdue books
     try {
       const data = await apiFetch("/borrow-records/reports/overdue", {
@@ -80,6 +92,8 @@ export default function DashboardPage() {
       setOverdueBooks(data);
     } catch (err: any) {
       console.log(err);
+    } finally {
+      setDataFetching(false);
     }
   }
 
@@ -168,7 +182,21 @@ export default function DashboardPage() {
             <h2 className="font-semibold">Total Books</h2>
             <BookOpen className="h-4 w-4 text-gray-600" />
           </div>
-          <p className="mt-2 text-2xl font-bold">{totalBooks}</p>
+          {dataFetching && (
+            <div className="flex mt-2">
+              <DNA
+                visible={true}
+                height="50"
+                width="50"
+                ariaLabel="dna-loading"
+                wrapperStyle={{}}
+                wrapperClass="dna-wrapper"
+              />
+            </div>
+          )}
+          <p className="mt-2 text-2xl font-bold">
+            {dataFetching == false && totalBooks}
+          </p>
           {userRole == "admin" && (
             <p className="text-xs text-gray-500 dark:text-gray-600">
               All books in system
@@ -180,22 +208,62 @@ export default function DashboardPage() {
             <h2 className="font-semibold">Total Members</h2>
             <Users className="h-4 w-4 text-gray-600" />
           </div>
-          <p className="mt-2 text-2xl font-bold">{totalMembers}</p>
+          {dataFetching && (
+            <div className="flex mt-2">
+              <DNA
+                visible={true}
+                height="50"
+                width="50"
+                ariaLabel="dna-loading"
+                wrapperStyle={{}}
+                wrapperClass="dna-wrapper"
+              />
+            </div>
+          )}
+          <p className="mt-2 text-2xl font-bold">
+            {dataFetching == false && totalMembers}
+          </p>
         </div>
         <div className="px-5 py-6 rounded-lg border border-gray-300 dark:border-gray-700">
           <div className="flex justify-between items-center">
             <h2 className="font-semibold">Active Borrows</h2>
             <ArrowLeftRight className="h-4 w-4 text-gray-600" />
           </div>
-          <p className="mt-2 text-2xl font-bold">{totalBorrows}</p>
+          {dataFetching && (
+            <div className="flex mt-2">
+              <DNA
+                visible={true}
+                height="50"
+                width="50"
+                ariaLabel="dna-loading"
+                wrapperStyle={{}}
+                wrapperClass="dna-wrapper"
+              />
+            </div>
+          )}
+          <p className="mt-2 text-2xl font-bold">
+            {dataFetching == false && totalBorrows}
+          </p>
         </div>
         <div className="px-5 py-6 rounded-lg border border-gray-300 dark:border-gray-700">
           <div className="flex justify-between items-center">
             <h2 className="font-semibold">Overdue Books</h2>
             <AlertTriangle className="h-4 w-4 text-red-400" />
           </div>
+          {dataFetching && (
+            <div className="flex mt-2">
+              <DNA
+                visible={true}
+                height="50"
+                width="50"
+                ariaLabel="dna-loading"
+                wrapperStyle={{}}
+                wrapperClass="dna-wrapper"
+              />
+            </div>
+          )}
           <p className="mt-2 text-2xl text-red-400 font-semibold">
-            {totalOverdueBooks}
+            {dataFetching == false && totalOverdueBooks}
           </p>
         </div>
       </div>

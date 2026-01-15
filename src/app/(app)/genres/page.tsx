@@ -14,6 +14,7 @@ import EditModal from "@/components/modals/genres/Edit";
 import Delete from "@/components/modals/genres/Delete";
 import { getUserRole } from "@/lib/user";
 import Unauthorized from "@/components/layout/Unauthorized";
+import { DNA } from "react-loader-spinner";
 
 export default function genres() {
   const [genres, setGenres] = useState([]);
@@ -22,8 +23,10 @@ export default function genres() {
   const [selectedMember, setSelectedMember] = useState<any>(null);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [dataFetching, setDataFetching] = useState(false);
 
   const fetchGenres = async () => {
+    setDataFetching(true);
     // Get genres
     try {
       const data = await apiFetch("/genres", {
@@ -33,6 +36,8 @@ export default function genres() {
       setGenres(data);
     } catch (err: any) {
       console.log(err);
+    } finally {
+      setDataFetching(false);
     }
   };
 
@@ -84,6 +89,19 @@ export default function genres() {
 
         {/* Grid of 3 cards */}
         <div className="md:grid md:grid-cols-3 space-y-6 md:space-y-0 md:gap-6 mt-6">
+          {dataFetching && (
+            <div className="flex h-screen col-span-3 justify-center">
+              <DNA
+                visible={true}
+                height="80"
+                width="80"
+                ariaLabel="dna-loading"
+                wrapperStyle={{}}
+                wrapperClass="dna-wrapper"
+              />
+            </div>
+          )}
+
           {filteredGenres.map((genre: any) => {
             return (
               <div

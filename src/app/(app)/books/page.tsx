@@ -22,6 +22,7 @@ import View from "@/components/modals/books/View";
 import EditModal from "@/components/modals/books/Edit";
 import Delete from "@/components/modals/books/Delete";
 import { getUserRole } from "@/lib/user";
+import { DNA } from "react-loader-spinner";
 
 export default function Books() {
   const [books, setBooks] = useState([]);
@@ -31,8 +32,10 @@ export default function Books() {
   const [selectedBook, setSelectedBook] = useState<any>(null);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [dataFetching, setDataFetching] = useState(false);
 
   const fetchBooks = async () => {
+    setDataFetching(true);
     // Get books
     try {
       const data = await apiFetch("/books", {
@@ -42,6 +45,8 @@ export default function Books() {
       setBooks(data);
     } catch (err: any) {
       console.log(err);
+    } finally {
+      setDataFetching(false);
     }
   };
 
@@ -97,6 +102,18 @@ export default function Books() {
 
       {/* Grid of 3 cards */}
       <div className="flex flex-col md:grid md:grid-cols-3 md:gap-5 space-y-5 md:space-y-0 mt-6">
+        {dataFetching && (
+          <div className="flex col-span-3 h-screen justify-center">
+            <DNA
+              visible={true}
+              height="80"
+              width="80"
+              ariaLabel="dna-loading"
+              wrapperStyle={{}}
+              wrapperClass="dna-wrapper"
+            />
+          </div>
+        )}
         {filteredBooks.map((book: any) => {
           const available = book.available_copies > 0;
           return (

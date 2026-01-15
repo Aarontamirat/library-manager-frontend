@@ -6,14 +6,17 @@ import { apiFetch } from "@/lib/api";
 import { Progress } from "@/components/ui/progress";
 import { getUserRole } from "@/lib/user";
 import Unauthorized from "@/components/layout/Unauthorized";
+import { DNA } from "react-loader-spinner";
 
 export default function Members() {
   const [popularGenres, setPopularGenres] = useState<any[]>([]);
   const [overdueRecords, setOverdueRecords] = useState<any[]>([]);
   const [summaryReport, setSummaryReport] = useState<any>({});
+  const [dataFetching, setDataFetching] = useState(false);
 
   // Fetch overdue records
   const fetchOverdueRecords = async () => {
+    setDataFetching(true);
     try {
       const data = await apiFetch("/borrow-records/reports/overdue", {
         method: "GET",
@@ -28,11 +31,14 @@ export default function Members() {
       );
     } catch (err) {
       console.error(err);
+    } finally {
+      setDataFetching(false);
     }
   };
 
   // Fetch popular genres
   const fetchPopularGenres = async () => {
+    setDataFetching(true);
     try {
       const data = await apiFetch("/borrow-records/reports/popular-genres", {
         method: "GET",
@@ -41,11 +47,14 @@ export default function Members() {
       setPopularGenres(data);
     } catch (err) {
       console.error(err);
+    } finally {
+      setDataFetching(false);
     }
   };
 
   //   Fetch summary report
   const fetchSummaryReport = async () => {
+    setDataFetching(true);
     try {
       const data = await apiFetch("/borrow-records/reports/summary", {
         method: "GET",
@@ -54,6 +63,8 @@ export default function Members() {
       setSummaryReport(data);
     } catch (err) {
       console.error(err);
+    } finally {
+      setDataFetching(false);
     }
   };
 
@@ -93,6 +104,19 @@ export default function Members() {
                 Books that are past their due date
               </p>
             </div>
+
+            {dataFetching && (
+              <div className="flex h-screen justify-center">
+                <DNA
+                  visible={true}
+                  height="80"
+                  width="80"
+                  ariaLabel="dna-loading"
+                  wrapperStyle={{}}
+                  wrapperClass="dna-wrapper"
+                />
+              </div>
+            )}
 
             {overdueRecords.map((overdue) => {
               const overdueDays = Math.floor(
@@ -134,6 +158,19 @@ export default function Members() {
               </div>
               <p className="text-gray-600 text-sm">Most borrowed book genres</p>
             </div>
+
+            {dataFetching && (
+              <div className="flex h-screen justify-center">
+                <DNA
+                  visible={true}
+                  height="80"
+                  width="80"
+                  ariaLabel="dna-loading"
+                  wrapperStyle={{}}
+                  wrapperClass="dna-wrapper"
+                />
+              </div>
+            )}
 
             {/* Genres List */}
             <div className="space-y-4">

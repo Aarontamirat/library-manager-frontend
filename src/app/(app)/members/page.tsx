@@ -15,6 +15,7 @@ import EditModal from "@/components/modals/members/Edit";
 import Delete from "@/components/modals/members/Delete";
 import HistoryView from "@/components/modals/members/HistoryView";
 import { getUserRole } from "@/lib/user";
+import { DNA } from "react-loader-spinner";
 
 export default function Members() {
   const [members, setMembers] = useState([]);
@@ -26,8 +27,10 @@ export default function Members() {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isHistoryViewModalOpen, setIsHistoryViewModalOpen] = useState(false);
+  const [dataFetching, setDataFetching] = useState(false);
 
   const fetchMembers = async () => {
+    setDataFetching(true);
     // Get books
     try {
       const data = await apiFetch("/members", {
@@ -37,10 +40,13 @@ export default function Members() {
       setMembers(data);
     } catch (err: any) {
       console.log(err);
+    } finally {
+      setDataFetching(false);
     }
   };
 
   const fetchBorrowRecords = async () => {
+    setDataFetching(true);
     // Get borrow records
     try {
       const data = await apiFetch("/borrow-records", {
@@ -50,6 +56,8 @@ export default function Members() {
       setBorrowRecords(data);
     } catch (err: any) {
       console.log(err);
+    } finally {
+      setDataFetching(false);
     }
   };
 
@@ -112,6 +120,18 @@ export default function Members() {
 
       {/* Grid of 3 cards */}
       <div className="md:grid md:grid-cols-3 md:gap-5 space-y-5 md:space-y-0 mt-6">
+        {dataFetching && (
+          <div className="flex col-span-3 h-screen justify-center">
+            <DNA
+              visible={true}
+              height="80"
+              width="80"
+              ariaLabel="dna-loading"
+              wrapperStyle={{}}
+              wrapperClass="dna-wrapper"
+            />
+          </div>
+        )}
         {filteredMembers.map((member: any) => {
           // get borrowed count
           const borrowed = borrowedCount(member.id);

@@ -6,13 +6,16 @@ import { useState, useEffect } from "react";
 import { apiFetch } from "@/lib/api";
 import BorrowBook from "@/components/modals/borrow-return/BorrowBook";
 import ReturnBook from "@/components/modals/borrow-return/ReturnBook";
+import { DNA } from "react-loader-spinner";
 
 export default function Books() {
   const [borrowRecords, setBorrowRecords] = useState([]);
   const [isBorrowModalOpen, setIsBorrowModalOpen] = useState(false);
   const [isReturnModalOpen, setIsReturnModalOpen] = useState(false);
+  const [dataFetching, setDataFetching] = useState(false);
 
   const fetchBorrowRecords = async () => {
+    setDataFetching(true);
     // Get books
     try {
       const data = await apiFetch("/borrow-records", {
@@ -22,6 +25,8 @@ export default function Books() {
       setBorrowRecords(data);
     } catch (err: any) {
       console.log(err);
+    } finally {
+      setDataFetching(false);
     }
   };
 
@@ -67,6 +72,18 @@ export default function Books() {
       {/* Content */}
       <div className="mt-6">
         <div className="flex flex-col gap-5">
+          {dataFetching && (
+            <div className="flex h-screen justify-center">
+              <DNA
+                visible={true}
+                height="80"
+                width="80"
+                ariaLabel="dna-loading"
+                wrapperStyle={{}}
+                wrapperClass="dna-wrapper"
+              />
+            </div>
+          )}
           {borrowRecords.map((record: any, index: number) => {
             return (
               <div

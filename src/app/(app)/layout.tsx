@@ -40,7 +40,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="md:flex h-screen">
       <div className="fixed md:relative z-10">
-        <div className="fixed top-3 left-3 right-0 z-20 md:hidden">
+        <div className="fixed top-3 left-3 z-20 md:hidden">
           <Button
             className=""
             variant="secondary"

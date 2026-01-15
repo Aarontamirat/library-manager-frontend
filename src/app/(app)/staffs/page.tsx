@@ -13,6 +13,7 @@ import Add from "@/components/modals/staffs/Add";
 import View from "@/components/modals/staffs/View";
 import EditModal from "@/components/modals/staffs/Edit";
 import Delete from "@/components/modals/staffs/Delete";
+import { DNA } from "react-loader-spinner";
 
 export default function Staffs() {
   const [staffs, setStaffs] = useState([]);
@@ -22,8 +23,10 @@ export default function Staffs() {
   const [selectedMember, setSelectedMember] = useState<any>(null);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [dataFetching, setDataFetching] = useState(false);
 
   const fetchStaffs = async () => {
+    setDataFetching(true);
     // Get staffs
     try {
       const data = await apiFetch("/auth/users", {
@@ -33,6 +36,8 @@ export default function Staffs() {
       setStaffs(data.users);
     } catch (err: any) {
       console.log(err);
+    } finally {
+      setDataFetching(false);
     }
   };
 
@@ -86,6 +91,18 @@ export default function Staffs() {
 
       {/* Grid of 3 cards */}
       <div className="md:grid md:grid-cols-3 md:gap-5 space-y-6 md:space-y-0 mt-6">
+        {dataFetching && (
+          <div className="flex h-screen col-span-3 justify-center">
+            <DNA
+              visible={true}
+              height="80"
+              width="80"
+              ariaLabel="dna-loading"
+              wrapperStyle={{}}
+              wrapperClass="dna-wrapper"
+            />
+          </div>
+        )}
         {filteredStaffs.map((staff: any) => {
           return (
             <div
