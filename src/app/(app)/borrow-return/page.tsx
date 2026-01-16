@@ -47,7 +47,7 @@ export default function Books() {
           </p>
         </div>
 
-        <div className="flex flex-col text-base space-x-2 space-y-2">
+        <div className="flex flex-col md:flex-row text-base space-x-2 space-y-2">
           <Button
             variant="default"
             size="lg"
