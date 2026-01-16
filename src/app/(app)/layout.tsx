@@ -53,7 +53,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
         </div>
       </div>
 
-      {/* 🔹 Click-outside overlay (mobile only) */}
+      {/* Click-outside overlay (mobile only) */}
       {menuOpen && (
         <div
           className="fixed inset-0 z-10 md:hidden"
