@@ -12,6 +12,7 @@ import { Button } from "@/components/ui/button";
 import { apiFetch } from "@/lib/api";
 import { useEffect, useState } from "react";
 import { Label } from "@/components/ui/label";
+import { DNA } from "react-loader-spinner";
 
 interface ViewModalProps {
   isOpen: boolean;
@@ -83,9 +84,16 @@ export default function HistoryView({
         {/* Contebt */}
         <div className="px-6 py-4 max-h-[65vh] overflow-y-auto space-y-6">
           {loading && (
-            <p className="text-center text-gray-500">
-              Loading borrowing history…
-            </p>
+            <div className="flex justify-center">
+              <DNA
+                visible={true}
+                height="80"
+                width="80"
+                ariaLabel="dna-loading"
+                wrapperStyle={{}}
+                wrapperClass="dna-wrapper"
+              />
+            </div>
           )}
 
           {!loading && borrowHistory.length === 0 && (
