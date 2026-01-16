@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { isAuthenticated, getToken } from "@/lib/auth";
+import { isAuthenticated } from "@/lib/auth";
 import Sidebar from "@/components/layout/Sidebar";
 import Topbar from "@/components/layout/Topbar";
 import { Button } from "@/components/ui/button";
@@ -25,44 +25,46 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   if (checkingAuth) {
     return (
       <div className="flex h-screen items-center justify-center">
-        <DNA
-          visible={true}
-          height="80"
-          width="80"
-          ariaLabel="dna-loading"
-          wrapperStyle={{}}
-          wrapperClass="dna-wrapper"
-        />
+        <DNA height="80" width="80" ariaLabel="dna-loading" />
       </div>
     );
   }
 
   return (
-    <div className="md:flex h-screen">
-      <div className="fixed md:relative z-10">
-        <div className="fixed top-3 left-3 z-20 md:hidden">
+    <div className="md:flex h-screen relative">
+      {/* Sidebar */}
+      <div className="fixed md:relative z-20">
+        <div className="fixed top-3 left-3 z-30 md:hidden">
           <Button
-            className=""
             variant="secondary"
             size="icon"
-            onClick={() => {
-              setMenuOpen(!menuOpen);
-            }}
+            onClick={() => setMenuOpen((prev) => !prev)}
           >
             {menuOpen ? <X /> : <Menu />}
           </Button>
         </div>
+
         <div
-          className={`absolute top-0 left-0 bottom-0 md:relative ${
-            menuOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"
-          }  transition-all ease-in-out duration-1300`}
+          className={`absolute top-0 left-0 bottom-0 md:relative
+          ${menuOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"}
+          transition-transform duration-300 ease-in-out`}
         >
           <Sidebar />
         </div>
       </div>
+
+      {/* 🔹 Click-outside overlay (mobile only) */}
+      {menuOpen && (
+        <div
+          className="fixed inset-0 z-10 md:hidden"
+          onClick={() => setMenuOpen(false)}
+        />
+      )}
+
+      {/* Main Content */}
       <div
         className={`md:flex md:flex-1 md:flex-col ${
-          menuOpen && "brightness-50 md:brightness-100"
+          menuOpen ? "brightness-50 md:brightness-100" : ""
         }`}
       >
         <Topbar />
