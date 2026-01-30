@@ -36,7 +36,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${roboto.variable} antialiasedbg-gray-100 text-gray-900`}
+        className={`${roboto.variable} antialiased bg-gray-100 text-gray-900`}
       >
         {children}
         <Toaster position="top-right" />
